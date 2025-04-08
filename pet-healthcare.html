@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Healthcare - JeevMitr</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .pet-healthcare {
+            padding-top: 100px;
+            min-height: 100vh;
+            background: #f5f5f5;
+        }
+        .healthcare-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 40px 0;
+        }
+        .service-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .service-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .service-header i {
+            font-size: 24px;
+            color: var(--primary);
+        }
+        .service-description {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .action-button {
+            background: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .action-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        .appointment-form {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-weight: 500;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+        .veterinarian-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .veterinarian-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .veterinarian-info {
+            margin-bottom: 15px;
+        }
+        .veterinarian-name {
+            font-size: 18px;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        .veterinarian-specialty {
+            color: #666;
+            font-size: 14px;
+        }
+        .veterinarian-rating {
+            color: #ffc107;
+            margin: 10px 0;
+        }
+        .veterinarian-availability {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+        .availability-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4caf50;
+        }
+        .availability-dot.offline {
+            background: #f44336;
+        }
+        @media (max-width: 768px) {
+            .healthcare-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i style="font-size: 40px; color: var(--primary); margin-right: 10px;"></i>
+                    <h1>JeevMitr</h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="pet-healthcare">
+        <div class="container">
+            <div class="section-title">
+                <h2>Pet Healthcare Services</h2>
+                <p>Comprehensive healthcare solutions for your beloved pets</p>
+            </div>
+            
+            <div class="healthcare-container">
+                <div class="services-section">
+                    <div class="service-card">
+                        <div class="service-header">
+                            <i class="fas fa-stethoscope"></i>
+                            <h3>AI-Powered Diagnosis</h3>
+                        </div>
+                        <p class="service-description">
+                            Get instant preliminary diagnosis for your pet's symptoms using our advanced AI technology.
+                            This tool helps you understand potential health issues before visiting a veterinarian.
+                        </p>
+                        <button class="action-button" onclick="window.location.href='ai-diagnosis.html'">
+                            <i class="fas fa-brain"></i> Try AI Diagnosis
+                        </button>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-header">
+                            <i class="fas fa-calendar-check"></i>
+                            <h3>Book Appointment</h3>
+                        </div>
+                        <p class="service-description">
+                            Schedule an appointment with our network of experienced veterinarians.
+                            Choose your preferred date, time, and specialist.
+                        </p>
+                        <button class="action-button" onclick="document.getElementById('appointmentForm').scrollIntoView({behavior: 'smooth'})">
+                            <i class="fas fa-calendar-plus"></i> Book Now
+                        </button>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-header">
+                            <i class="fas fa-syringe"></i>
+                            <h3>Vaccination Reminders</h3>
+                        </div>
+                        <p class="service-description">
+                            Never miss your pet's vaccination schedule. Set up reminders and get notifications
+                            for upcoming vaccinations and check-ups.
+                        </p>
+                        <button class="action-button" onclick="showVaccinationModal()">
+                            <i class="fas fa-bell"></i> Set Reminder
+                        </button>
+                    </div>
+                </div>
+
+                <div class="appointment-section">
+                    <div class="appointment-form" id="appointmentForm">
+                        <h3>Book Veterinary Appointment</h3>
+                        <form id="bookingForm">
+                            <div class="form-group">
+                                <label for="petName">Pet Name</label>
+                                <input type="text" id="petName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="petType">Pet Type</label>
+                                <select id="petType" required>
+                                    <option value="">Select Pet Type</option>
+                                    <option value="dog">Dog</option>
+                                    <option value="cat">Cat</option>
+                                    <option value="bird">Bird</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="appointmentDate">Preferred Date</label>
+                                <input type="date" id="appointmentDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="appointmentTime">Preferred Time</label>
+                                <input type="time" id="appointmentTime" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reason">Reason for Visit</label>
+                                <textarea id="reason" rows="3" required></textarea>
+                            </div>
+                            <button type="submit" class="action-button">
+                                <i class="fas fa-check"></i> Confirm Booking
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="veterinarian-list">
+                        <h3>Available Veterinarians</h3>
+                        <div class="veterinarian-card">
+                            <div class="veterinarian-info">
+                                <h4 class="veterinarian-name">Dr. Priya Sharma</h4>
+                                <p class="veterinarian-specialty">Small Animal Specialist</p>
+                                <div class="veterinarian-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <span>(4.5)</span>
+                                </div>
+                                <div class="veterinarian-availability">
+                                    <span class="availability-dot"></span>
+                                    <span>Available Today</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="veterinarian-card">
+                            <div class="veterinarian-info">
+                                <h4 class="veterinarian-name">Dr. Rajesh Kumar</h4>
+                                <p class="veterinarian-specialty">Emergency Care</p>
+                                <div class="veterinarian-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <span>(5.0)</span>
+                                </div>
+                                <div class="veterinarian-availability">
+                                    <span class="availability-dot"></span>
+                                    <span>Available Today</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Handle appointment booking
+        const bookingForm = document.getElementById('bookingForm');
+        bookingForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const petName = document.getElementById('petName').value;
+            const appointmentDate = document.getElementById('appointmentDate').value;
+            const appointmentTime = document.getElementById('appointmentTime').value;
+            
+            // Show confirmation
+            alert(`Appointment booked successfully!\n\nPet: ${petName}\nDate: ${appointmentDate}\nTime: ${appointmentTime}`);
+            
+            // Reset form
+            bookingForm.reset();
+        });
+
+        // Function to show vaccination reminder modal
+        function showVaccinationModal() {
+            alert('Vaccination reminder feature coming soon!');
+        }
+    </script>
+</body>
+</html> 

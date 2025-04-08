@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO Connect - JeevMitr</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .ngo-connect {
+            padding-top: 100px; /* Add padding to account for fixed header */
+            min-height: 100vh;
+        }
+        .location-selector {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            text-align: center;
+        }
+        .location-selector select {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid var(--primary);
+            border-radius: 5px;
+            width: 100%;
+            max-width: 400px;
+            background-color: white;
+            cursor: pointer;
+        }
+        .trainers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px 0;
+        }
+        .trainer-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .trainer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .trainer-name {
+            color: var(--primary);
+            font-size: 22px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .trainer-location {
+            color: var(--gray);
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        .trainer-specialization {
+            margin-bottom: 15px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        .trainer-ngo {
+            color: var(--primary-dark);
+            font-weight: 500;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        .book-session {
+            background: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .book-session:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .modal-content {
+            position: relative;
+            background-color: white;
+            margin: 10% auto;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        .modal-title {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .modal-form input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .modal-form button {
+            background: var(--primary);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .modal-form button:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i style="font-size: 40px; color: var(--primary); margin-right: 10px;"></i>
+                    <h1>JeevMitr</h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="ngo-connect">
+        <div class="container">
+            <div class="section-title">
+                <h2>NGO Connect</h2>
+                <p>Find pet trainers and connect with NGOs in your area</p>
+            </div>
+            <div class="location-selector">
+                <select id="locationSelect" onchange="filterTrainers()">
+                    <option value="">Select Location</option>
+                    <option value="delhi">Delhi</option>
+                    <option value="mumbai">Mumbai</option>
+                    <option value="bangalore">Bangalore</option>
+                    <option value="chennai">Chennai</option>
+                    <option value="jaipur">Jaipur</option>
+                </select>
+            </div>
+            <div class="trainers-grid" id="trainersGrid">
+                <!-- Trainers will be dynamically added here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h3 class="modal-title">Book Training Session</h3>
+            <form class="modal-form" id="bookingForm">
+                <input type="text" id="userName" placeholder="Your Name" required>
+                <input type="email" id="userEmail" placeholder="Your Email" required>
+                <input type="tel" id="userPhone" placeholder="Your Phone Number" required>
+                <input type="date" id="sessionDate" required>
+                <input type="time" id="sessionTime" required>
+                <button type="submit">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        const trainers = [
+            {
+                id: 1,
+                name: "Rahul Sharma",
+                location: "Delhi",
+                specialization: "Dog Training & Behavior Modification",
+                experience: "5 years",
+                ngo: "Paws & Care Foundation"
+            },
+            {
+                id: 2,
+                name: "Priya Patel",
+                location: "Mumbai",
+                specialization: "Cat Behavior & Rehabilitation",
+                experience: "3 years",
+                ngo: "Mumbai Pet Welfare Society"
+            },
+            {
+                id: 3,
+                name: "Arjun Kumar",
+                location: "Bangalore",
+                specialization: "Pet Rehabilitation & Therapy",
+                experience: "7 years",
+                ngo: "Bangalore Animal Rescue"
+            },
+            {
+                id: 4,
+                name: "Meera Singh",
+                location: "Chennai",
+                specialization: "Basic Pet Training & Socialization",
+                experience: "4 years",
+                ngo: "Chennai Pet Care Trust"
+            },
+            {
+                id: 5,
+                name: "Vikram Rathore",
+                location: "Jaipur",
+                specialization: "Advanced Dog Training",
+                experience: "6 years",
+                ngo: "Jaipur Animal Welfare Society"
+            },
+            {
+                id: 6,
+                name: "Ananya Gupta",
+                location: "Delhi",
+                specialization: "Pet First Aid & Emergency Care",
+                experience: "4 years",
+                ngo: "Delhi Pet Rescue Foundation"
+            },
+            {
+                id: 7,
+                name: "Rajesh Mehta",
+                location: "Mumbai",
+                specialization: "Service Dog Training",
+                experience: "8 years",
+                ngo: "Mumbai Animal Care Trust"
+            },
+            {
+                id: 8,
+                name: "Sneha Reddy",
+                location: "Bangalore",
+                specialization: "Cat Behavior Specialist",
+                experience: "5 years",
+                ngo: "Bangalore Feline Foundation"
+            }
+        ];
+
+        let selectedTrainer = null;
+
+        function displayTrainers(filteredTrainers = trainers) {
+            const trainersGrid = document.getElementById('trainersGrid');
+            trainersGrid.innerHTML = '';
+            
+            filteredTrainers.forEach(trainer => {
+                const trainerCard = document.createElement('div');
+                trainerCard.className = 'trainer-card';
+                trainerCard.innerHTML = `
+                    <h3 class="trainer-name">${trainer.name}</h3>
+                    <p class="trainer-ngo">${trainer.ngo}</p>
+                    <p class="trainer-location">${trainer.location}</p>
+                    <p class="trainer-specialization">${trainer.specialization}</p>
+                    <p>Experience: ${trainer.experience}</p>
+                    <button class="book-session" onclick="openBookingModal(${trainer.id})">Book Session</button>
+                `;
+                trainersGrid.appendChild(trainerCard);
+            });
+        }
+
+        function filterTrainers() {
+            const location = document.getElementById('locationSelect').value;
+            if (!location) {
+                displayTrainers();
+                return;
+            }
+            const filteredTrainers = trainers.filter(trainer => 
+                trainer.location.toLowerCase() === location.toLowerCase()
+            );
+            displayTrainers(filteredTrainers);
+        }
+
+        function openBookingModal(trainerId) {
+            selectedTrainer = trainers.find(t => t.id === trainerId);
+            document.getElementById('bookingModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('bookingModal').style.display = 'none';
+        }
+
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userName = document.getElementById('userName').value;
+            alert(`Booking confirmed with ${selectedTrainer.name} from ${selectedTrainer.ngo}!\nWe'll contact you shortly at ${document.getElementById('userEmail').value}`);
+            closeModal();
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('bookingModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Display all trainers initially
+        displayTrainers();
+    </script>
+</body>
+</html> 

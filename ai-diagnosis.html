@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Diagnosis - JeevMitr</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .ai-diagnosis {
+            padding-top: 100px;
+            min-height: 100vh;
+            background: #f5f5f5;
+        }
+        .diagnosis-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 40px 0;
+        }
+        .symptoms-form {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .results-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-weight: 500;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+        .symptom-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .symptom-tag {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .symptom-tag i {
+            cursor: pointer;
+        }
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .submit-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .results-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .results-header i {
+            font-size: 24px;
+            color: var(--primary);
+        }
+        .disease-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .disease-name {
+            font-size: 18px;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .disease-probability {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .probability-bar {
+            flex: 1;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .probability-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        .disease-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .recommendations {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .recommendation-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .recommendation-item i {
+            color: var(--primary);
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        .loading i {
+            font-size: 24px;
+            color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @media (max-width: 768px) {
+            .diagnosis-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i style="font-size: 40px; color: var(--primary); margin-right: 10px;"></i>
+                    <h1>JeevMitr</h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="ai-diagnosis">
+        <div class="container">
+            <div class="section-title">
+                <h2>AI Pet Diagnosis</h2>
+                <p>Enter your pet's symptoms to get a preliminary diagnosis</p>
+            </div>
+            <div class="diagnosis-container">
+                <div class="symptoms-form">
+                    <form id="diagnosisForm">
+                        <div class="form-group">
+                            <label for="petType">Pet Type</label>
+                            <select id="petType" required>
+                                <option value="">Select Pet Type</option>
+                                <option value="dog">Dog</option>
+                                <option value="cat">Cat</option>
+                                <option value="bird">Bird</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age (in years)</label>
+                            <input type="number" id="age" min="0" max="30" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="symptoms">Symptoms</label>
+                            <textarea id="symptoms" rows="4" placeholder="Describe your pet's symptoms in detail..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="duration">Duration of Symptoms</label>
+                            <select id="duration" required>
+                                <option value="">Select Duration</option>
+                                <option value="lessThanDay">Less than a day</option>
+                                <option value="1-3days">1-3 days</option>
+                                <option value="4-7days">4-7 days</option>
+                                <option value="moreThanWeek">More than a week</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="submit-btn" id="submitBtn">
+                            <i class="fas fa-search"></i> Analyze Symptoms
+                        </button>
+                    </form>
+                </div>
+
+                <div class="results-section">
+                    <div class="loading" id="loading">
+                        <i class="fas fa-spinner"></i>
+                        <p>Analyzing symptoms...</p>
+                    </div>
+                    <div id="resultsContent">
+                        <div class="results-header">
+                            <i class="fas fa-clipboard-check"></i>
+                            <h3>Diagnosis Results</h3>
+                        </div>
+                        <div id="diseaseResults">
+                            <!-- Disease results will be displayed here -->
+                        </div>
+                        <div class="recommendations" id="recommendations">
+                            <!-- Recommendations will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Sample disease database
+        const diseaseDatabase = {
+            dog: [
+                {
+                    name: "Canine Parvovirus",
+                    symptoms: ["vomiting", "diarrhea", "lethargy", "loss of appetite"],
+                    description: "A highly contagious viral disease affecting dogs, particularly puppies.",
+                    recommendations: [
+                        "Seek immediate veterinary care",
+                        "Keep the dog hydrated",
+                        "Isolate from other dogs",
+                        "Follow strict hygiene protocols" 
+                    ]
+                },
+                {
+                    name: "Kennel Cough",
+                    symptoms: ["coughing", "sneezing", "runny nose", "fever"],
+                    description: "A respiratory infection common in dogs, especially in crowded conditions.",
+                    recommendations: [
+                        "Visit veterinarian for diagnosis",
+                        "Keep dog warm and comfortable",
+                        "Ensure proper rest",
+                        "Consider vaccination"
+                    ]
+                },
+                {
+                    name: "Flea Allergy Dermatitis",
+                    symptoms: ["itching", "red skin", "hair loss", "scabs"],
+                    description: "An allergic reaction to flea bites causing severe itching and skin irritation.",
+                    recommendations: [
+                        "Use flea prevention treatment",
+                        "Regular grooming",
+                        "Clean bedding and environment",
+                        "Consult vet for medication"
+                    ]
+                }
+            ],
+            cat: [
+                {
+                    name: "Feline Upper Respiratory Infection",
+                    symptoms: ["sneezing", "coughing", "runny nose", "eye discharge"],
+                    description: "A common viral or bacterial infection affecting cats' respiratory system.",
+                    recommendations: [
+                        "Keep cat warm and comfortable",
+                        "Ensure proper hydration",
+                        "Clean eyes and nose regularly",
+                        "Visit veterinarian if symptoms worsen"
+                    ]
+                },
+                {
+                    name: "Feline Lower Urinary Tract Disease",
+                    symptoms: ["frequent urination", "blood in urine", "straining to urinate", "litter box avoidance"],
+                    description: "A group of conditions affecting the bladder and urethra in cats.",
+                    recommendations: [
+                        "Seek immediate veterinary care",
+                        "Increase water intake",
+                        "Consider special diet",
+                        "Reduce stress"
+                    ]
+                },
+                {
+                    name: "Feline Diabetes",
+                    symptoms: ["increased thirst", "frequent urination", "weight loss", "increased appetite"],
+                    description: "A metabolic disorder where the body cannot properly regulate blood sugar levels.",
+                    recommendations: [
+                        "Consult veterinarian for diagnosis",
+                        "Implement dietary changes",
+                        "Regular monitoring",
+                        "Consider insulin therapy"
+                    ]
+                }
+            ]
+        };
+
+        const diagnosisForm = document.getElementById('diagnosisForm');
+        const loading = document.getElementById('loading');
+        const resultsContent = document.getElementById('resultsContent');
+        const diseaseResults = document.getElementById('diseaseResults');
+        const recommendations = document.getElementById('recommendations');
+        const submitBtn = document.getElementById('submitBtn');
+
+        diagnosisForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            loading.style.display = 'block';
+            resultsContent.style.display = 'none';
+            submitBtn.disabled = true;
+
+            // Simulate AI processing delay
+            setTimeout(() => {
+                analyzeSymptoms();
+                loading.style.display = 'none';
+                resultsContent.style.display = 'block';
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+
+        function analyzeSymptoms() {
+            const petType = document.getElementById('petType').value;
+            const symptoms = document.getElementById('symptoms').value.toLowerCase();
+            const age = parseInt(document.getElementById('age').value);
+            const duration = document.getElementById('duration').value;
+
+            // Clear previous results
+            diseaseResults.innerHTML = '';
+            recommendations.innerHTML = '';
+
+            if (!petType || !symptoms) {
+                diseaseResults.innerHTML = '<p>Please enter all required information.</p>';
+                return;
+            }
+
+            const petDiseases = diseaseDatabase[petType] || [];
+            const matchedDiseases = [];
+
+            // Find matching diseases based on symptoms
+            petDiseases.forEach(disease => {
+                const matchingSymptoms = disease.symptoms.filter(symptom => 
+                    symptoms.includes(symptom)
+                );
+                
+                if (matchingSymptoms.length > 0) {
+                    const probability = (matchingSymptoms.length / disease.symptoms.length) * 100;
+                    matchedDiseases.push({
+                        ...disease,
+                        probability: Math.min(probability, 100)
+                    });
+                }
+            });
+
+            // Sort by probability
+            matchedDiseases.sort((a, b) => b.probability - a.probability);
+
+            // Display results
+            if (matchedDiseases.length === 0) {
+                diseaseResults.innerHTML = `
+                    <div class="disease-card">
+                        <p>No matching conditions found. Please consult a veterinarian for a proper diagnosis.</p>
+                    </div>
+                `;
+            } else {
+                matchedDiseases.forEach(disease => {
+                    const diseaseCard = document.createElement('div');
+                    diseaseCard.className = 'disease-card';
+                    diseaseCard.innerHTML = `
+                        <h4 class="disease-name">${disease.name}</h4>
+                        <div class="disease-probability">
+                            <span>${disease.probability.toFixed(1)}% match</span>
+                            <div class="probability-bar">
+                                <div class="probability-fill" style="width: ${disease.probability}%"></div>
+                            </div>
+                        </div>
+                        <p class="disease-description">${disease.description}</p>
+                    `;
+                    diseaseResults.appendChild(diseaseCard);
+
+                    // Add recommendations
+                    disease.recommendations.forEach(rec => {
+                        const recItem = document.createElement('div');
+                        recItem.className = 'recommendation-item';
+                        recItem.innerHTML = `
+                            <i class="fas fa-check-circle"></i>
+                            <span>${rec}</span>
+                        `;
+                        recommendations.appendChild(recItem);
+                    });
+                });
+            }
+
+            // Add disclaimer
+            const disclaimer = document.createElement('div');
+            disclaimer.className = 'disease-card';
+            disclaimer.innerHTML = `
+                <p style="color: #666; font-size: 14px;">
+                    <strong>Disclaimer:</strong> This is a preliminary diagnosis based on the symptoms provided. 
+                    Please consult a veterinarian for a proper medical diagnosis and treatment plan.
+                </p>
+            `;
+            diseaseResults.appendChild(disclaimer);
+        }
+    </script>
+</body>
+</html> 

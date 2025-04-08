@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Training - JeevMitr</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .training {
+            padding-top: 100px;
+            min-height: 100vh;
+        }
+        .trainers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .trainer-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .trainer-card:hover {
+            transform: translateY(-5px);
+        }
+        .trainer-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .trainer-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+            font-size: 24px;
+        }
+        .trainer-info h3 {
+            margin: 0;
+            color: var(--primary);
+        }
+        .trainer-info p {
+            margin: 5px 0;
+            color: var(--gray);
+        }
+        .trainer-specialties {
+            margin: 15px 0;
+        }
+        .specialty-tag {
+            display: inline-block;
+            background: #e3f2fd;
+            color: var(--primary);
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 14px;
+        }
+        .trainer-stats {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-item h4 {
+            margin: 0;
+            color: var(--primary);
+        }
+        .stat-item p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: var(--gray);
+        }
+        .book-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        .book-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .modal-content {
+            position: relative;
+            background-color: white;
+            margin: 5% auto;
+            padding: 40px;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .close-modal {
+            position: absolute;
+            right: 25px;
+            top: 25px;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--gray);
+            transition: color 0.3s;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+        .close-modal:hover {
+            color: var(--primary);
+        }
+        .modal-title {
+            color: var(--primary);
+            margin-bottom: 30px;
+            font-size: 28px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        .modal-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+        .booking-form {
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 16px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: #f9f9f9;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            background-color: white;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .submit-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        .receipt-details {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f9f9f9;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+        }
+        .receipt-details p {
+            margin: 15px 0;
+            font-size: 16px;
+            line-height: 1.6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .receipt-details strong {
+            color: var(--primary);
+            font-weight: 600;
+            min-width: 150px;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+        .print-btn {
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .print-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        .print-btn i {
+            font-size: 18px;
+        }
+        @media (max-width: 768px) {
+            .modal-content {
+                padding: 30px 20px;
+                margin: 10% auto;
+            }
+            .receipt-details p {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            .receipt-details strong {
+                min-width: auto;
+            }
+            .modal-buttons {
+                flex-direction: column;
+            }
+            .print-btn,
+            .submit-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i style="font-size: 40px; color: var(--primary); margin-right: 10px;"></i>
+                    <h1>JeevMitr</h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="training">
+        <div class="container">
+            <div class="section-title">
+                <h2>Pet Training</h2>
+                <p>Find expert trainers for your pet's development</p>
+            </div>
+            <div class="trainers-grid" id="trainersGrid">
+                <!-- Trainer cards will be dynamically added here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('bookingModal')">&times;</span>
+            <h3 class="modal-title">Book Training Session</h3>
+            <div class="booking-form">
+                <form id="trainingForm">
+                    <div class="form-group">
+                        <label for="petName">Pet Name</label>
+                        <input type="text" id="petName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="petType">Pet Type</label>
+                        <select id="petType" required>
+                            <option value="">Select Pet Type</option>
+                            <option value="dog">Dog</option>
+                            <option value="cat">Cat</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="trainingType">Training Type</label>
+                        <select id="trainingType" required>
+                            <option value="">Select Training Type</option>
+                            <option value="basic">Basic Obedience</option>
+                            <option value="advanced">Advanced Training</option>
+                            <option value="behavioral">Behavioral Training</option>
+                            <option value="agility">Agility Training</option>
+                            <option value="puppy">Puppy Training</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionDate">Session Date</label>
+                        <input type="date" id="sessionDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionTime">Session Time</label>
+                        <input type="time" id="sessionTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="specialRequirements">Special Requirements</label>
+                        <textarea id="specialRequirements" rows="3" placeholder="Any specific requirements or notes for the trainer"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Book Session</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('confirmationModal')">&times;</span>
+            <h3 class="modal-title">Booking Confirmation</h3>
+            <div class="receipt-details" id="bookingReceipt">
+                <!-- Receipt details will be dynamically added here -->
+            </div>
+            <div class="modal-buttons">
+                <button onclick="printReceipt('bookingReceipt')" class="print-btn">
+                    <i class="fas fa-print"></i> Print Receipt
+                </button>
+                <button onclick="closeModal('confirmationModal')" class="submit-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const trainers = [
+            {
+                id: 1,
+                name: "Rajesh Kumar",
+                experience: "8 years",
+                rating: "4.9",
+                sessions: "500+",
+                specialties: ["Basic Obedience", "Behavioral Training", "Puppy Training"],
+                location: "Delhi",
+                avatar: "RK"
+            },
+            {
+                id: 2,
+                name: "Priya Sharma",
+                experience: "6 years",
+                rating: "4.8",
+                sessions: "400+",
+                specialties: ["Advanced Training", "Agility Training", "Service Dog Training"],
+                location: "Mumbai",
+                avatar: "PS"
+            },
+            {
+                id: 3,
+                name: "Amit Patel",
+                experience: "10 years",
+                rating: "4.9",
+                sessions: "700+",
+                specialties: ["Behavioral Training", "Therapy Dog Training", "Competition Training"],
+                location: "Bangalore",
+                avatar: "AP"
+            },
+            {
+                id: 4,
+                name: "Neha Gupta",
+                experience: "5 years",
+                rating: "4.7",
+                sessions: "300+",
+                specialties: ["Puppy Training", "Basic Obedience", "Socialization"],
+                location: "Chennai",
+                avatar: "NG"
+            },
+            {
+                id: 5,
+                name: "Vikram Singh",
+                experience: "7 years",
+                rating: "4.8",
+                sessions: "450+",
+                specialties: ["Agility Training", "Advanced Training", "Protection Training"],
+                location: "Jaipur",
+                avatar: "VS"
+            }
+        ];
+
+        function displayTrainers() {
+            const trainersGrid = document.getElementById('trainersGrid');
+            trainersGrid.innerHTML = trainers.map(trainer => `
+                <div class="trainer-card">
+                    <div class="trainer-header">
+                        <div class="trainer-avatar">${trainer.avatar}</div>
+                        <div class="trainer-info">
+                            <h3>${trainer.name}</h3>
+                            <p>${trainer.location}</p>
+                        </div>
+                    </div>
+                    <div class="trainer-specialties">
+                        ${trainer.specialties.map(specialty => 
+                            `<span class="specialty-tag">${specialty}</span>`
+                        ).join('')}
+                    </div>
+                    <div class="trainer-stats">
+                        <div class="stat-item">
+                            <h4>${trainer.experience}</h4>
+                            <p>Experience</p>
+                        </div>
+                        <div class="stat-item">
+                            <h4>${trainer.rating}</h4>
+                            <p>Rating</p>
+                        </div>
+                        <div class="stat-item">
+                            <h4>${trainer.sessions}</h4>
+                            <p>Sessions</p>
+                        </div>
+                    </div>
+                    <button class="book-btn" onclick="openBookingModal(${trainer.id})">Book Session</button>
+                </div>
+            `).join('');
+        }
+
+        let selectedTrainer = null;
+
+        function openBookingModal(trainerId) {
+            selectedTrainer = trainers.find(t => t.id === trainerId);
+            document.getElementById('bookingModal').style.display = 'block';
+        }
+
+        document.getElementById('trainingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const petName = document.getElementById('petName').value;
+            const petType = document.getElementById('petType').value;
+            const trainingType = document.getElementById('trainingType').value;
+            const sessionDate = document.getElementById('sessionDate').value;
+            const sessionTime = document.getElementById('sessionTime').value;
+            const specialRequirements = document.getElementById('specialRequirements').value;
+
+            const receipt = document.getElementById('bookingReceipt');
+            receipt.innerHTML = `
+                <p><strong>Trainer:</strong> ${selectedTrainer.name}</p>
+                <p><strong>Pet Name:</strong> ${petName}</p>
+                <p><strong>Pet Type:</strong> ${petType}</p>
+                <p><strong>Training Type:</strong> ${trainingType}</p>
+                <p><strong>Session Date:</strong> ${sessionDate}</p>
+                <p><strong>Session Time:</strong> ${sessionTime}</p>
+                ${specialRequirements ? `<p><strong>Special Requirements:</strong> ${specialRequirements}</p>` : ''}
+                <p><strong>Booking ID:</strong> ${Math.random().toString(36).substr(2, 9).toUpperCase()}</p>
+            `;
+
+            document.getElementById('bookingModal').style.display = 'none';
+            document.getElementById('confirmationModal').style.display = 'block';
+        });
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function printReceipt(receiptId) {
+            const printWindow = window.open('', '_blank');
+            const receiptContent = document.getElementById(receiptId).innerHTML;
+            const modalTitle = document.querySelector('#confirmationModal .modal-title').textContent;
+            
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>${modalTitle}</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            padding: 20px;
+                        }
+                        .receipt-header {
+                            text-align: center;
+                            margin-bottom: 20px;
+                        }
+                        .receipt-header h1 {
+                            color: #4caf50;
+                            margin-bottom: 10px;
+                        }
+                        .receipt-details {
+                            background: #f9f9f9;
+                            padding: 20px;
+                            border-radius: 8px;
+                        }
+                        .receipt-details p {
+                            margin: 10px 0;
+                            font-size: 16px;
+                        }
+                        .receipt-details strong {
+                            color: #4caf50;
+                        }
+                        .receipt-footer {
+                            margin-top: 30px;
+                            text-align: center;
+                            font-size: 14px;
+                            color: #666;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="receipt-header">
+                        <h1>JeevMitr</h1>
+                        <h2>${modalTitle}</h2>
+                        <p>Date: ${new Date().toLocaleDateString()}</p>
+                    </div>
+                    <div class="receipt-details">
+                        ${receiptContent}
+                    </div>
+                    <div class="receipt-footer">
+                        <p>Thank you for choosing JeevMitr!</p>
+                        <p>For any queries, contact: support@jeevmitr.com</p>
+                    </div>
+                </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Initialize the page
+        displayTrainers();
+    </script>
+</body>
+</html> 

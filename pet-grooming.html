@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Grooming - JeevMitr</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .grooming {
+            padding-top: 100px; /* Add padding to account for fixed header */
+            min-height: 100vh;
+        }
+        .booking-form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        .submit-btn:hover {
+            background: var(--primary-dark);
+        }
+        .reminder-section {
+            margin-top: 40px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .modal-content {
+            position: relative;
+            background-color: white;
+            margin: 10% auto;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        .modal-title {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .receipt-details {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        .receipt-details p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .receipt-details strong {
+            color: var(--primary);
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        .print-btn {
+            background: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        .print-btn:hover {
+            background: var(--primary-dark);
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .modal-content,
+            .modal-content * {
+                visibility: visible;
+            }
+            .modal-content {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none;
+            }
+            .close-modal,
+            .modal-buttons {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i style="font-size: 40px; color: var(--primary); margin-right: 10px;"></i>
+                    <h1>JeevMitr</h1>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="grooming">
+        <div class="container">
+            <div class="section-title">
+                <h2>Pet Grooming</h2>
+                <p>Book an appointment for your pet's grooming</p>
+            </div>
+            <div class="booking-form">
+                <form id="groomingForm">
+                    <div class="form-group">
+                        <label for="petName">Pet Name</label>
+                        <input type="text" id="petName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="petType">Pet Type</label>
+                        <select id="petType" required>
+                            <option value="">Select Pet Type</option>
+                            <option value="dog">Dog</option>
+                            <option value="cat">Cat</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="service">Service Type</label>
+                        <select id="service" required>
+                            <option value="">Select Service</option>
+                            <option value="basic">Basic Grooming (Bath, Brush, Nail Trim)</option>
+                            <option value="premium">Premium Grooming (Basic + Ear Cleaning, Teeth Brushing)</option>
+                            <option value="spa">Spa Treatment (Premium + Aromatherapy, Massage)</option>
+                            <option value="full">Full Grooming (Spa + Haircut/Styling)</option>
+                            <option value="puppy">Puppy/Kitten First Groom (Gentle Introduction)</option>
+                            <option value="medical">Medical Grooming (Special Needs Care)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Appointment Date</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="time">Appointment Time</label>
+                        <input type="time" id="time" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="specialInstructions">Special Instructions</label>
+                        <textarea id="specialInstructions" placeholder="Any specific requirements or notes for the groomer"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Book Appointment</button>
+                </form>
+
+                <div class="reminder-section">
+                    <h3>Set Grooming Reminders</h3>
+                    <div class="form-group">
+                        <label for="reminderType">Reminder Type</label>
+                        <select id="reminderType" onchange="updateReminderFields()">
+                            <option value="one-time">One-time Reminder</option>
+                            <option value="weekly">Weekly Reminder</option>
+                            <option value="monthly">Monthly Reminder</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="oneTimeReminder">
+                        <label for="reminderDate">Reminder Date</label>
+                        <input type="date" id="reminderDate">
+                    </div>
+                    <div class="form-group" id="weeklyReminder" style="display: none;">
+                        <label for="reminderDay">Day of Week</label>
+                        <select id="reminderDay">
+                            <option value="monday">Monday</option>
+                            <option value="tuesday">Tuesday</option>
+                            <option value="wednesday">Wednesday</option>
+                            <option value="thursday">Thursday</option>
+                            <option value="friday">Friday</option>
+                            <option value="saturday">Saturday</option>
+                            <option value="sunday">Sunday</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="monthlyReminder" style="display: none;">
+                        <label for="reminderDayOfMonth">Day of Month</label>
+                        <input type="number" id="reminderDayOfMonth" min="1" max="31" placeholder="Enter day (1-31)">
+                    </div>
+                    <div class="form-group">
+                        <label for="reminderTime">Reminder Time</label>
+                        <input type="time" id="reminderTime">
+                    </div>
+                    <div class="form-group">
+                        <label for="reminderNote">Reminder Note</label>
+                        <textarea id="reminderNote" placeholder="Add any specific grooming instructions or notes"></textarea>
+                    </div>
+                    <button onclick="setReminder()" class="submit-btn">Set Grooming Reminder</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Confirmation Modal -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('bookingModal')">&times;</span>
+            <h3 class="modal-title">Booking Confirmation</h3>
+            <div class="receipt-details" id="bookingReceipt">
+                <!-- Receipt details will be dynamically added here -->
+            </div>
+            <div class="modal-buttons">
+                <button onclick="printReceipt('bookingReceipt')" class="print-btn">
+                    <i class="fas fa-print"></i> Print Receipt
+                </button>
+                <button onclick="closeModal('bookingModal')" class="submit-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reminder Confirmation Modal -->
+    <div id="reminderModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('reminderModal')">&times;</span>
+            <h3 class="modal-title">Reminder Set</h3>
+            <div class="receipt-details" id="reminderReceipt">
+                <!-- Reminder details will be dynamically added here -->
+            </div>
+            <div class="modal-buttons">
+                <button onclick="printReceipt('reminderReceipt')" class="print-btn">
+                    <i class="fas fa-print"></i> Print Receipt
+                </button>
+                <button onclick="closeModal('reminderModal')" class="submit-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.getElementById('groomingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const petName = document.getElementById('petName').value;
+            const petType = document.getElementById('petType').value;
+            const service = document.getElementById('service').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            const instructions = document.getElementById('specialInstructions').value;
+
+            const receipt = document.getElementById('bookingReceipt');
+            receipt.innerHTML = `
+                <p><strong>Pet Name:</strong> ${petName}</p>
+                <p><strong>Pet Type:</strong> ${petType}</p>
+                <p><strong>Service:</strong> ${service}</p>
+                <p><strong>Date:</strong> ${date}</p>
+                <p><strong>Time:</strong> ${time}</p>
+                ${instructions ? `<p><strong>Special Instructions:</strong> ${instructions}</p>` : ''}
+                <p><strong>Booking ID:</strong> ${Math.random().toString(36).substr(2, 9).toUpperCase()}</p>
+            `;
+
+            document.getElementById('bookingModal').style.display = 'block';
+        });
+
+        function updateReminderFields() {
+            const reminderType = document.getElementById('reminderType').value;
+            document.getElementById('oneTimeReminder').style.display = reminderType === 'one-time' ? 'block' : 'none';
+            document.getElementById('weeklyReminder').style.display = reminderType === 'weekly' ? 'block' : 'none';
+            document.getElementById('monthlyReminder').style.display = reminderType === 'monthly' ? 'block' : 'none';
+        }
+
+        function setReminder() {
+            const reminderType = document.getElementById('reminderType').value;
+            const time = document.getElementById('reminderTime').value;
+            const note = document.getElementById('reminderNote').value;
+            
+            if (!time) {
+                alert('Please select a reminder time');
+                return;
+            }
+
+            let reminderDetails = '';
+            switch(reminderType) {
+                case 'one-time':
+                    const date = document.getElementById('reminderDate').value;
+                    if (!date) {
+                        alert('Please select a date for one-time reminder');
+                        return;
+                    }
+                    reminderDetails = `One-time grooming reminder set for ${date} at ${time}`;
+                    break;
+                case 'weekly':
+                    const day = document.getElementById('reminderDay').value;
+                    reminderDetails = `Weekly grooming reminder set for every ${day} at ${time}`;
+                    break;
+                case 'monthly':
+                    const dayOfMonth = document.getElementById('reminderDayOfMonth').value;
+                    if (!dayOfMonth || dayOfMonth < 1 || dayOfMonth > 31) {
+                        alert('Please enter a valid day of month (1-31)');
+                        return;
+                    }
+                    reminderDetails = `Monthly grooming reminder set for day ${dayOfMonth} at ${time}`;
+                    break;
+            }
+
+            if (note) {
+                reminderDetails += `\nNote: ${note}`;
+            }
+
+            const receipt = document.getElementById('reminderReceipt');
+            receipt.innerHTML = `
+                <p><strong>Reminder Type:</strong> ${reminderType}</p>
+                <p><strong>Time:</strong> ${time}</p>
+                ${reminderType === 'one-time' ? `<p><strong>Date:</strong> ${document.getElementById('reminderDate').value}</p>` : ''}
+                ${reminderType === 'weekly' ? `<p><strong>Day:</strong> ${document.getElementById('reminderDay').value}</p>` : ''}
+                ${reminderType === 'monthly' ? `<p><strong>Day of Month:</strong> ${document.getElementById('reminderDayOfMonth').value}</p>` : ''}
+                ${note ? `<p><strong>Note:</strong> ${note}</p>` : ''}
+            `;
+
+            document.getElementById('reminderModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function printReceipt(receiptId) {
+            const printWindow = window.open('', '_blank');
+            const receiptContent = document.getElementById(receiptId).innerHTML;
+            const modalTitle = document.querySelector(`#${receiptId === 'bookingReceipt' ? 'bookingModal' : 'reminderModal'} .modal-title`).textContent;
+            
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>${modalTitle}</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            padding: 20px;
+                        }
+                        .receipt-header {
+                            text-align: center;
+                            margin-bottom: 20px;
+                        }
+                        .receipt-header h1 {
+                            color: #4caf50;
+                            margin-bottom: 10px;
+                        }
+                        .receipt-details {
+                            background: #f9f9f9;
+                            padding: 20px;
+                            border-radius: 8px;
+                        }
+                        .receipt-details p {
+                            margin: 10px 0;
+                            font-size: 16px;
+                        }
+                        .receipt-details strong {
+                            color: #4caf50;
+                        }
+                        .receipt-footer {
+                            margin-top: 30px;
+                            text-align: center;
+                            font-size: 14px;
+                            color: #666;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="receipt-header">
+                        <h1>JeevMitr</h1>
+                        <h2>${modalTitle}</h2>
+                        <p>Date: ${new Date().toLocaleDateString()}</p>
+                    </div>
+                    <div class="receipt-details">
+                        ${receiptContent}
+                    </div>
+                    <div class="receipt-footer">
+                        <p>Thank you for choosing JeevMitr!</p>
+                        <p>For any queries, contact: support@jeevmitr.com</p>
+                    </div>
+                </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html> 
