@@ -38,6 +38,7 @@
             border-radius: 10px;
             margin-bottom: 15px;
             transition: transform 0.3s;
+            background: #f5f5f5;
         }
         .product-card:hover .product-image {
             transform: scale(1.05);
@@ -197,6 +198,33 @@
             margin-bottom: 20px;
             color: var(--primary);
         }
+
+        /* Add loading animation styles */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .product-image.error {
+            background: #ffebee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d32f2f;
+        }
     </style>
 </head>
 <body>
@@ -252,54 +280,93 @@
     </div>
 
     <script>
+        // Pixabay API configuration
+        const PIXABAY_API_KEY = '49682095-6510dbd79b6c06a276bab328a'; // Replace with your Pixabay API key
+        
         const products = [
             {
                 id: 1,
                 name: "Premium Dog Food",
                 price: 999,
-                image: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                searchQuery: "premium+dry+dog+food+kibble"
             },
             {
                 id: 2,
                 name: "Cat Litter Box",
                 price: 499,
-                image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                searchQuery: "covered+cat+litter+box+tray"
             },
             {
                 id: 3,
                 name: "Pet Toys Set",
                 price: 299,
-                image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                searchQuery: "dog+cat+pet+toys+collection"
             },
             {
                 id: 4,
                 name: "Pet Grooming Kit",
                 price: 799,
-                image: "https://images.unsplash.com/photo-1597633425046-08f5110420b5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                searchQuery: "pet+grooming+brush+scissors+kit"
             },
             {
                 id: 5,
                 name: "Dog Bed",
                 price: 1499,
-                image: "https://images.unsplash.com/photo-1591958911319-0c8a1a0c0a5a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                searchQuery: "comfortable+plush+dog+bed"
             },
             {
                 id: 6,
                 name: "Cat Scratching Post",
                 price: 599,
-                image: "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                searchQuery: "sisal+cat+scratching+post+tree"
             },
             {
                 id: 7,
                 name: "Pet Carrier",
                 price: 1299,
-                image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                searchQuery: "portable+pet+travel+carrier+bag"
             },
             {
                 id: 8,
                 name: "Pet Water Fountain",
                 price: 899,
-                image: "https://images.unsplash.com/photo-1597633425046-08f5110420b5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                searchQuery: "automatic+pet+water+fountain+dispenser"
+            },
+            {
+                id: 9,
+                name: "Large Bird Cage",
+                price: 2499,
+                searchQuery: "large+parrot+bird+cage+aviary"
+            },
+            {
+                id: 10,
+                name: "Bird Food Mix",
+                price: 399,
+                searchQuery: "mixed+seeds+bird+food+grains"
+            },
+            {
+                id: 11,
+                name: "Bird Perch Set",
+                price: 499,
+                searchQuery: "natural+wooden+bird+perches"
+            },
+            {
+                id: 12,
+                name: "Bird Bath",
+                price: 299,
+                searchQuery: "bird+bath+bowl+water+dish"
+            },
+            {
+                id: 13,
+                name: "Bird Nest Box",
+                price: 599,
+                searchQuery: "wooden+bird+house+nesting+box"
+            },
+            {
+                id: 14,
+                name: "Bird Feeder",
+                price: 449,
+                searchQuery: "hanging+bird+seed+feeder"
             }
         ];
 
@@ -309,11 +376,26 @@
         const cartCount = document.getElementById('cartCount');
         const cartTotal = document.getElementById('cartTotal');
 
-        function displayProducts() {
+        async function fetchProductImage(searchQuery) {
+            try {
+                const response = await fetch(
+                    `https://pixabay.com/api/?key=${PIXABAY_API_KEY}&q=${searchQuery}&image_type=photo&category=animals&per_page=20`
+                );
+                const data = await response.json();
+                return data.hits?.[0]?.webformatURL || null;
+            } catch (error) {
+                console.error('Error fetching image:', error);
+                return null;
+            }
+        }
+
+        async function displayProducts() {
             const productsGrid = document.getElementById('productsGrid');
             productsGrid.innerHTML = products.map(product => `
                 <div class="product-card">
-                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                    </div>
                     <h3 class="product-title">${product.name}</h3>
                     <p class="product-price">₹${product.price}</p>
                     <button class="add-to-cart" onclick="addToCart(${product.id})">
@@ -321,6 +403,36 @@
                     </button>
                 </div>
             `).join('');
+
+            // Fetch and update images
+            const productCards = document.querySelectorAll('.product-card');
+            for (let i = 0; i < products.length; i++) {
+                const product = products[i];
+                const card = productCards[i];
+                const loadingDiv = card.querySelector('.loading');
+                
+                try {
+                    const imageUrl = await fetchProductImage(product.searchQuery);
+                    if (imageUrl) {
+                        const img = document.createElement('img');
+                        img.src = imageUrl;
+                        img.alt = product.name;
+                        img.className = 'product-image';
+                        img.onerror = () => {
+                            img.src = '';
+                            img.className = 'product-image error';
+                            img.innerHTML = '<i class="fas fa-image"></i> Image not available';
+                        };
+                        loadingDiv.replaceWith(img);
+                    } else {
+                        loadingDiv.className = 'product-image error';
+                        loadingDiv.innerHTML = '<i class="fas fa-image"></i> Image not available';
+                    }
+                } catch (error) {
+                    loadingDiv.className = 'product-image error';
+                    loadingDiv.innerHTML = '<i class="fas fa-image"></i> Image not available';
+                }
+            }
         }
 
         function addToCart(productId) {
@@ -416,4 +528,4 @@
         }
     </script>
 </body>
-</html> 
+</html>
