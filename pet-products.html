@@ -228,7 +228,7 @@
     </style>
 </head>
 <body>
-    <header>
+        <header>
         <div class="container">
             <nav>
                 <ul class="nav-links">
@@ -286,87 +286,147 @@
         const products = [
             {
                 id: 1,
-                name: "Premium Dog Food",
-                price: 999,
-                searchQuery: "premium+dry+dog+food+kibble"
+                name: "Premium Dog Food Bowl Set",
+                category: "Food",
+                petType: "Dog",
+                price: 1299,
+                rating: 4.8,
+                reviews: 245,
+                description: "Complete feeding station with elevated bowls for comfortable dining",
+                features: ["Elevated Design", "Stainless Steel Bowls", "Non-slip Base"],
+                image: null
             },
             {
                 id: 2,
-                name: "Cat Litter Box",
-                price: 499,
-                searchQuery: "covered+cat+litter+box+tray"
+                name: "Interactive Cat String Toy",
+                category: "Toys",
+                petType: "Cat",
+                price: 899,
+                rating: 4.7,
+                reviews: 189,
+                description: "Engaging wand toy with feathers and bells for active play",
+                features: ["Retractable Wand", "Natural Feathers", "Bell Attachments"],
+                image: null
             },
             {
                 id: 3,
-                name: "Pet Toys Set",
-                price: 299,
-                searchQuery: "dog+cat+pet+toys+collection"
+                name: "Plush Pet Bed - Donut Style",
+                category: "Bedding",
+                petType: "All",
+                price: 2499,
+                rating: 4.9,
+                reviews: 320,
+                description: "Round, soft plush bed with raised rim for cozy rest",
+                features: ["Self-warming", "Machine Washable", "Anti-anxiety Design"],
+                image: null
             },
             {
                 id: 4,
-                name: "Pet Grooming Kit",
-                price: 799,
-                searchQuery: "pet+grooming+brush+scissors+kit"
+                name: "Modern Bird Cage with Stand",
+                category: "Housing",
+                petType: "Bird",
+                price: 3999,
+                rating: 4.8,
+                reviews: 156,
+                description: "Spacious vertical cage with multiple perches and play areas",
+                features: ["Easy Access Doors", "Seed Catchers", "Included Perches"],
+                image: null
             },
             {
                 id: 5,
-                name: "Dog Bed",
-                price: 1499,
-                searchQuery: "comfortable+plush+dog+bed"
+                name: "LED Pet Water Fountain",
+                category: "Accessories",
+                petType: "All",
+                price: 1599,
+                rating: 4.6,
+                reviews: 278,
+                description: "Illuminated water fountain with cascading design",
+                features: ["LED Indicator", "Multiple Flow Settings", "Carbon Filter"],
+                image: null
             },
             {
                 id: 6,
-                name: "Cat Scratching Post",
-                price: 599,
-                searchQuery: "sisal+cat+scratching+post+tree"
+                name: "Natural Cat Grooming Set",
+                category: "Hygiene",
+                petType: "Cat",
+                price: 799,
+                rating: 4.7,
+                reviews: 423,
+                description: "Complete grooming kit with natural bristle brush",
+                features: ["Soft Bristles", "Ergonomic Handle", "Massage Action"],
+                image: null
             },
             {
                 id: 7,
-                name: "Pet Carrier",
-                price: 1299,
-                searchQuery: "portable+pet+travel+carrier+bag"
+                name: "Digital Pet Feeder Pro",
+                category: "Accessories",
+                petType: "All",
+                price: 3299,
+                rating: 4.8,
+                reviews: 167,
+                description: "Smart automatic feeder with portion control",
+                features: ["LCD Display", "Voice Recording", "Backup Battery"],
+                image: null
             },
             {
                 id: 8,
-                name: "Pet Water Fountain",
-                price: 899,
-                searchQuery: "automatic+pet+water+fountain+dispenser"
+                name: "Professional Dog Training Kit",
+                category: "Training",
+                petType: "Dog",
+                price: 1499,
+                rating: 4.7,
+                reviews: 234,
+                description: "Complete training set with clicker and treats pouch",
+                features: ["Professional Clicker", "Treat Storage", "Training Guide"],
+                image: null
             },
             {
                 id: 9,
-                name: "Large Bird Cage",
-                price: 2499,
-                searchQuery: "large+parrot+bird+cage+aviary"
+                name: "Comfort Pet Travel Carrier",
+                category: "Travel",
+                petType: "All",
+                price: 1299,
+                rating: 4.6,
+                reviews: 198,
+                description: "Soft-sided carrier with mesh ventilation panels",
+                features: ["Shoulder Strap", "Safety Locks", "Comfort Pad"],
+                image: null
             },
             {
                 id: 10,
-                name: "Bird Food Mix",
-                price: 399,
-                searchQuery: "mixed+seeds+bird+food+grains"
+                name: "Tropical Fish Tank Set",
+                category: "Housing",
+                petType: "Fish",
+                price: 4999,
+                rating: 4.8,
+                reviews: 145,
+                description: "Modern aquarium with built-in filtration system",
+                features: ["LED Lighting", "Quiet Filter", "Live Plant Ready"],
+                image: null
             },
             {
                 id: 11,
-                name: "Bird Perch Set",
-                price: 499,
-                searchQuery: "natural+wooden+bird+perches"
+                name: "Pet Grooming Station",
+                category: "Grooming",
+                petType: "All",
+                price: 1799,
+                rating: 4.7,
+                reviews: 289,
+                description: "Professional grooming tools with adjustable table",
+                features: ["Height Adjustable", "Storage Tray", "Safety Harness"],
+                image: null
             },
             {
                 id: 12,
-                name: "Bird Bath",
-                price: 299,
-                searchQuery: "bird+bath+bowl+water+dish"
-            },
-            {
-                id: 13,
-                name: "Bird Nest Box",
-                price: 599,
-                searchQuery: "wooden+bird+house+nesting+box"
-            },
-            {
-                id: 14,
-                name: "Bird Feeder",
-                price: 449,
-                searchQuery: "hanging+bird+seed+feeder"
+                name: "Wellness Pet Care Package",
+                category: "Health",
+                petType: "All",
+                price: 999,
+                rating: 4.8,
+                reviews: 176,
+                description: "Complete pet care kit with health supplements",
+                features: ["Natural Ingredients", "Daily Supplements", "Health Guide"],
+                image: null
             }
         ];
 
@@ -379,7 +439,7 @@
         async function fetchProductImage(searchQuery) {
             try {
                 const response = await fetch(
-                    `https://pixabay.com/api/?key=${PIXABAY_API_KEY}&q=${searchQuery}&image_type=photo&category=animals&per_page=20`
+                    `https://pixabay.com/api/?key=${PIXABAY_API_KEY}&q=${searchQuery}&image_type=photo&category=animals&per_page=100`
                 );
                 const data = await response.json();
                 return data.hits?.[0]?.webformatURL || null;
@@ -387,6 +447,45 @@
                 console.error('Error fetching image:', error);
                 return null;
             }
+        }
+
+        async function generateSearchQuery(product) {
+            // Combine product category and pet type for more relevant results
+            const searchTerms = [];
+            if (product.petType && product.petType !== 'All') {
+                searchTerms.push(product.petType.toLowerCase());
+            }
+            if (product.category) {
+                searchTerms.push(product.category.toLowerCase());
+            }
+            // Add specific terms based on product category
+            switch (product.category) {
+                case 'Food':
+                    searchTerms.push('pet food');
+                    break;
+                case 'Toys':
+                    searchTerms.push('pet toy');
+                    break;
+                case 'Bedding':
+                    searchTerms.push('pet bed');
+                    break;
+                case 'Housing':
+                    searchTerms.push(product.petType === 'Bird' ? 'bird cage' : 'pet house');
+                    break;
+                case 'Accessories':
+                    searchTerms.push('pet accessory');
+                    break;
+                case 'Hygiene':
+                    searchTerms.push('pet care');
+                    break;
+                case 'Training':
+                    searchTerms.push('dog training');
+                    break;
+                case 'Grooming':
+                    searchTerms.push('pet grooming');
+                    break;
+            }
+            return searchTerms.join(' ');
         }
 
         async function displayProducts() {
@@ -412,7 +511,8 @@
                 const loadingDiv = card.querySelector('.loading');
                 
                 try {
-                    const imageUrl = await fetchProductImage(product.searchQuery);
+                    const searchQuery = await generateSearchQuery(product);
+                    const imageUrl = await fetchProductImage(searchQuery);
                     if (imageUrl) {
                         const img = document.createElement('img');
                         img.src = imageUrl;

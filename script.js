@@ -109,3 +109,50 @@ document.addEventListener('click', function(e) {
         document.querySelector('.profile-menu')?.classList.remove('active');
     }
 });
+
+// Toggle sidebar
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.querySelector('.sidebar-overlay');
+    sidebar.classList.toggle('active');
+    if (overlay) {
+        overlay.classList.toggle('active');
+    }
+}
+
+// Close sidebar when clicking outside or on overlay
+document.addEventListener('click', function(event) {
+    const sidebar = document.querySelector('.sidebar');
+    const menuToggle = document.querySelector('.menu-toggle');
+    const overlay = document.querySelector('.sidebar-overlay');
+    
+    if (!sidebar.contains(event.target) && !menuToggle.contains(event.target) && sidebar.classList.contains('active')) {
+        sidebar.classList.remove('active');
+        if (overlay) {
+            overlay.classList.remove('active');
+        }
+    }
+});
+
+// Profile menu toggle
+function toggleProfileMenu() {
+    const profileMenu = document.querySelector('.profile-menu');
+    profileMenu.classList.toggle('active');
+}
+
+// Handle logout
+function handleLogout() {
+    // Add logout logic here
+    alert('Logging out...');
+    window.location.href = 'index.html';
+}
+
+// Close profile menu when clicking outside
+document.addEventListener('click', function(event) {
+    const profileMenu = document.querySelector('.profile-menu');
+    const profileButton = document.querySelector('.profile-button');
+    
+    if (!profileMenu.contains(event.target) && !profileButton.contains(event.target) && profileMenu.classList.contains('active')) {
+        profileMenu.classList.remove('active');
+    }
+});

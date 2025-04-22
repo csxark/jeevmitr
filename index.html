@@ -10,30 +10,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="sidebar-overlay"></div>
     <header>
         <div class="container">
             <nav>
-                <!-- Left side - Hamburger menu -->
-                <div class="menu-container">
-                    <button class="hamburger-menu" onclick="toggleMenu()">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <div class="menu-dropdown">
-                        <ul class="nav-links">
-                            <li><a href="#features">Features</a></li>
-                            <li><a href="pet-healthcare.html">Pet Healthcare</a></li>
-                            <li><a href="pet-training.html">Pet Training</a></li>
-                            <li><a href="pet-grooming.html">Pet Grooming</a></li>
-                            <li><a href="ngo-connect.html">NGO Connect</a></li>
-                            <li><a href="ai-diagnosis.html">AI Diagnosis</a></li>
-                            <li><a href="pet-products.html">Pet Products</a></li>
-                        </ul>
-                    </div>
-                </div>
+                <!-- Menu Toggle Button -->
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
 
-                <!-- Center - Logo -->
+                <!-- Center Logo -->
                 <div class="logo">
-                    <i class="fas fa-paw" style="font-size: 40px; color: var(--primary); margin-right: 10px;"></i>
+                    <!-- <i class="fas fa-paw"></i> -->
                     <h1>JeevMitr</h1>
                 </div>
 
@@ -79,6 +67,19 @@
         </div>
     </header>
 
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="pet-healthcare.html"><i class="fas fa-heartbeat"></i> Pet Healthcare</a></li>
+            <li><a href="pet-training.html"><i class="fas fa-dog"></i> Pet Training</a></li>
+            <li><a href="pet-grooming.html"><i class="fas fa-cut"></i> Pet Grooming</a></li>
+            <li><a href="ngo-connect.html"><i class="fas fa-hand-holding-heart"></i> NGO Connect</a></li>
+            <li><a href="ai-diagnosis.html"><i class="fas fa-robot"></i> AI Diagnosis</a></li>
+            <li><a href="pet-products.html"><i class="fas fa-shopping-cart"></i> Pet Products</a></li>
+        </ul>
+    </div>
+
     <section class="hero">
         <div class="container">
             <div class="hero-content">
@@ -100,47 +101,53 @@
                 <p>Comprehensive pet care services all in one platform</p>
             </div>
             <div class="features-grid">
-                <div class="feature-card" onclick="window.location.href='pet-healthcare.html'">
+                <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-heartbeat" style="font-size: 40px; color: var(--primary);"></i>
                     </div>
                     <h3>Pet Healthcare</h3>
                     <p>Access veterinary services, book appointments, and get AI-based diagnosis for your pet's symptoms.</p>
+                    <a href="pet-healthcare.html" class="feature-button">Access Now <i class="fas fa-arrow-right"></i></a>
                 </div>
-                <div class="feature-card" onclick="window.location.href='pet-training.html'">
+                <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-dog" style="font-size: 40px; color: var(--primary);"></i>
                     </div>
                     <h3>Pet Training</h3>
                     <p>Find certified trainers, schedule sessions, and access training tips for your beloved pets.</p>
+                    <a href="pet-training.html" class="feature-button">Access Now <i class="fas fa-arrow-right"></i></a>
                 </div>
-                <div class="feature-card" onclick="window.location.href='pet-grooming.html'">
+                <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-cut" style="font-size: 40px; color: var(--primary);"></i>
                     </div>
                     <h3>Pet Grooming</h3>
                     <p>Book grooming appointments, set reminders, and subscribe to regular grooming services.</p>
+                    <a href="pet-grooming.html" class="feature-button">Access Now <i class="fas fa-arrow-right"></i></a>
                 </div>
-                <div class="feature-card" onclick="window.location.href='ngo-connect.html'">
+                <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-hands-helping" style="font-size: 40px; color: var(--primary);"></i>
                     </div>
                     <h3>NGO Connect</h3>
                     <p>Connect with animal welfare NGOs to help street animals and participate in rescue operations.</p>
+                    <a href="ngo-connect.html" class="feature-button">Access Now <i class="fas fa-arrow-right"></i></a>
                 </div>
-                <div class="feature-card" onclick="window.location.href='ai-diagnosis.html'">
+                <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-brain" style="font-size: 40px; color: var(--primary);"></i>
                     </div>
                     <h3>AI Diagnosis</h3>
                     <p>Get probable disease diagnosis based on symptoms and recommended solutions for your pet.</p>
+                    <a href="ai-diagnosis.html" class="feature-button">Access Now <i class="fas fa-arrow-right"></i></a>
                 </div>
-                <div class="feature-card" onclick="window.location.href='pet-products.html'">
+                <div class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-shopping-cart" style="font-size: 40px; color: var(--primary);"></i>
                     </div>
                     <h3>Pet Products</h3>
                     <p>Shop for essential pet care products with exclusive discounts and subscription options.</p>
+                    <a href="pet-products.html" class="feature-button">Access Now <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
         </div>
